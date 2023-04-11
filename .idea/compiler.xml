@@ -6,16 +6,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bootstrap_ready" />
+        <module name="javascript_3.1.3" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bootstrap_ready" target="11" />
+      <module name="javascript_3.1.3" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="bootstrap_ready" options="-parameters" />
+      <module name="javascript_3.1.3" options="-parameters" />
     </option>
   </component>
 </project>

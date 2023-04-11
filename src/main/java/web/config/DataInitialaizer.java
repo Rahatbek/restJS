@@ -1,48 +1,47 @@
 package web.config;
 
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import web.model.Role;
 import web.model.User;
-import web.repository.RoleRepository;
-import web.repository.UserRepository;
+import web.service.RoleService;
+import web.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-@Transactional
 public class DataInitialaizer {
+    private UserService userService;
+    private RoleService roleService;
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private BCryptPasswordEncoder passwordEncoder;
-    private Set<Role> rolesSet;
-
-    public DataInitialaizer(UserRepository userRepository,
-                            RoleRepository roleRepository,
-                            BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
+    public DataInitialaizer(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
     }
 
     @PostConstruct
-    public void initRoles() {
-        Role[] rolesArray = new Role[]{new Role("ROLE_ADMIN"), new Role("ROLE_USER")};
-        rolesSet = new HashSet<>();
-        rolesSet.addAll(Arrays.asList(rolesArray));
-        roleRepository.saveAll(rolesSet);
-    }
-
-    @PostConstruct
-    public void initUsers() {
-        User admin = new User("admin", "admin", 30, "admin@mail.ru", passwordEncoder.encode("admin"), rolesSet);
-        userRepository.save(admin);
+    public void Init() {
+        Set<Role> allRoles = new HashSet<>();
+        allRoles.add(new Role("ADMIN"));
+        allRoles.add(new Role("USER"));
+        Set<Role> userRole = new HashSet<>();
+        userRole.add(new Role("USER"));
+        Set<Role> adminRole = new HashSet<>();
+        adminRole.add(new Role("ADMIN"));
+        roleService.createRoles(allRoles);
+        User admin = new User("admin", "admin", 33, "admin@mail.ru", "admin",allRoles);
+//        admin.setRoles("ADMIN, USER");
+            userService.createUser(admin);
+        User user = new User("user", "user", 10, "user@mail.ru", "user", userRole);
+//        user.setRoles("USER");
+        userService.createUser(user);
+        User user1 = new User("user1", "user1", 20, "user1@mail.ru", "user1", userRole);
+//        user1.setRoles("USER");
+        userService.createUser(user1);
+        User user2 = new User("user2", "user2", 30, "user2@mail.ru", "user2", userRole);
+//        user2.setRoles("USER");
+        userService.createUser(user2);
     }
 }

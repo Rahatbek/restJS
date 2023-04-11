@@ -8,11 +8,11 @@ import java.util.Set;
 @Entity
 public class Role implements GrantedAuthority {
     @Id
-    //@GeneratedValue
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roleName;
 
-    //@Transient
+    @Transient
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
